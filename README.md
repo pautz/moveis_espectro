@@ -8,3 +8,12 @@ basta mudar as configuracoes de banco, api do mercado pago com acess token e pub
 /pix_aura/webhook.php
 
 devo mudar public key e acess token em gera_pix.php gerar_cartao.php processar_cartao.php
+
+gerar_cartao.php
+ const mp = new MercadoPago('PUBLICKEY'); // substitua pela sua Public Key
+
+gerar_pix.php
+$access_token = 'acess token'; //substitua pelo acess token
+
+processar_cartao.php
+$access_token = 'acess token'; // substitua pelo seu Access Token 
