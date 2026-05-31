@@ -1,0 +1,12 @@
+https://farolqr.com/site3/cadastro_produto/admin.php
+https://farolqr.com/site3/cadastro_produto/aprovacao.php
+https://farolqr.com/sys/compras.php
+
+/////////////////////////////todos esses abaixos tu bota o valor cheio do item, com o frete incluso pq api dos correios não funciona ainda
+Hectare Plantado:
+Valor Total do Hectare (KG):
+Valor(R$):
+Entrada Mínima (R$):
+/////////////////////////////
+
+o que esta entre */////////////////////////////* é todos o valor do item.
