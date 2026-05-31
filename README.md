@@ -1,19 +1,44 @@
 # moveis_espectro
-venda de moveis
+Sistema de venda de móveis planejados e sob medida
 
+## 🚀 Passos de configuração
 
-move os arquivos de dentro de farolqr.com para dentro do seu public_html, lembrando que eu utilizo a hostinger.com para hospedar meus sites.
-crie o db apartir de u839226731_farol.sql, 
-basta mudar as configuracoes de banco, api do mercado pago com acess token e public key, e no mercado pago developers configurar a url de webhook para site2
-/pix_aura/webhook.php
+1. **Mover arquivos**
+   - Copie todos os arquivos de dentro de `farolqr.com` para dentro do seu `public_html`.
+   - Obs: utilizo a **Hostinger.com** para hospedar meus sites.
 
-devo mudar public key e acess token em gera_pix.php gerar_cartao.php processar_cartao.php
+2. **Banco de dados**
+   - Crie o banco a partir do arquivo `u839226731_farol.sql`.
+   - Ajuste as configurações de conexão no arquivo `aura_db.php`.
 
-gerar_cartao.php
- const mp = new MercadoPago('PUBLICKEY'); // substitua pela sua Public Key
+3. **Configuração Mercado Pago**
+   - Configure a **API do Mercado Pago** com seu **Access Token** e **Public Key**.
+   - No painel do **Mercado Pago Developers**, defina a URL do webhook para:
+     ```
+     site2/pix_aura/webhook.php
+     ```
 
-gerar_pix.php
-$access_token = 'acess token'; //substitua pelo acess token
+4. **Alterar credenciais nos arquivos**
+   - `gera_pix.php`
+     ```php
+     $access_token = 'SEU_ACCESS_TOKEN'; // substitua pelo seu Access Token
+     ```
+   - `gerar_cartao.php`
+     ```javascript
+     const mp = new MercadoPago('SUA_PUBLIC_KEY'); // substitua pela sua Public Key
+     ```
+   - `processar_cartao.php`
+     ```php
+     $access_token = 'SEU_ACCESS_TOKEN'; // substitua pelo seu Access Token
+     ```
 
-processar_cartao.php
-$access_token = 'acess token'; // substitua pelo seu Access Token 
+5. **Testar**
+   - Gere um Pix ou pagamento no cartão para validar a integração.
+   - Verifique se o webhook atualiza corretamente o status no banco.
+
+---
+
+## 📌 Observações
+- Sempre mantenha suas credenciais seguras (não versionar tokens no GitHub).
+- O sistema foi projetado para ser **instalado e utilizado por qualquer pessoa ou empresa**.
+- Funciona tanto com **Pix** quanto com **pagamentos parcelados no cartão**.
