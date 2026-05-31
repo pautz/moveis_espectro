@@ -1,3 +1,5 @@
+crie o db apartir de u839226731_farol.sql
+
 https://farolqr.com/site3/cadastro_produto/admin.php
 https://farolqr.com/site3/cadastro_produto/aprovacao.php
 https://farolqr.com/sys/compras.php
