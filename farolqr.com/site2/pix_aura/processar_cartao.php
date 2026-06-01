@@ -12,15 +12,13 @@ if ($caixa === '' || $aura < 1 || $token === '' || $payment_method_id === '') {
     die("⚠️ Dados inválidos.");
 }
 
-// preço fixo por aura
-$preco_por_aura = 1.30;
+$preco_por_aura = 1;
 $reais = round($aura * $preco_por_aura, 2);
 $unique_id = uniqid('card_', true);
 
-$access_token = 'acess token'; // substitua pelo seu Access Token privado
-$descricao = "FarolQR.coms - compra de $aura aura para caixa postal $caixa";
+$access_token = 'ACESS TOKEN'; // substitua pelo seu Access Token privado
+$descricao = "FarolQR.Com Compra de $aura aura para caixa postal $caixa";
 
-// calcula valor da parcela pela sua regra própria
 $valor_parcela = round($reais / $installments, 2);
 
 $dados = [
@@ -36,7 +34,6 @@ $dados = [
     ]
 ];
 
-// chamada à API do Mercado Pago
 $ch = curl_init('https://api.mercadopago.com/v1/payments');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dados));
@@ -53,14 +50,9 @@ if ($resposta === false) {
 curl_close($ch);
 
 $resultado = json_decode($resposta, true);
-if (!isset($resultado['id'])) {
-    die("❌ Erro no pagamento: " . $resposta);
-}
-
 $status = $resultado['status'] ?? 'erro';
-$card_id = $resultado['id'];
+$card_id = $resultado['id'] ?? 'sem_id';
 
-// gravação no banco
 $stmt = $cx->prepare("INSERT INTO pedidos_aura 
   (caixa_postal, quantidade, valor_reais, pix_id, unique_id, copia_cola, link_pix, status, ip_cliente, payment_method_id, installments) 
   VALUES (?, ?, ?, ?, ?, '', '', ?, ?, ?, ?)");
@@ -74,21 +66,9 @@ $stmt->bind_param(
 $stmt->execute();
 $stmt->close();
 
-// feedback ao usuário
 echo "<h2>Resultado do Pagamento</h2>";
 echo "<p>Status: <strong>$status</strong></p>";
 echo "<p>Caixa Postal: $caixa</p>";
 echo "<p>Aura: $aura</p>";
-echo "<p>Valor pago: R$ " . number_format($reais, 2, ',', '.') . "</p>";
+echo "<p>Valor total: R$ " . number_format($reais, 2, ',', '.') . "</p>";
 echo "<p>Parcelas: $installments x de R$ " . number_format($valor_parcela, 2, ',', '.') . "</p>";
-
-if ($status === 'approved') {
-    echo "<p style='color:green'>✅ Pagamento aprovado!</p>";
-} elseif ($status === 'pending') {
-    echo "<p style='color:orange'>⏳ Pagamento pendente. Aguarde a confirmação.</p>";
-} elseif ($status === 'rejected') {
-    echo "<p style='color:red'>❌ Pagamento rejeitado. Verifique os dados do cartão ou tente outro método.</p>";
-} else {
-    echo "<p>⚠️ Status desconhecido. Detalhes: " . htmlspecialchars($resposta) . "</p>";
-}
-?>
