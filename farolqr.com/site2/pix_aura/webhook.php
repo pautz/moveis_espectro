@@ -118,7 +118,7 @@ if ($status === 'approved') {
             echo "📥 Pagamento registrado em pagamentos_recebidos<br>";
 
             // Credita Aura
-            $preco_por_aura = 1.30; // mesmo valor usado na geração do Pix
+            $preco_por_aura = 1; // mesmo valor usado na geração do Pix
 $aura_creditada = intval($valor / $preco_por_aura);
 
 
