@@ -257,7 +257,7 @@ footer {
 <div class="container">
   <div class="card">
     <h3>💡 O que é Aura?</h3>
-    <p>Aura é o crédito utilizado para serviços da Móveis Espectro. Cada unidade de Aura equivale a <strong>R$ 1,30</strong>.</p>
+    <p>Aura é o crédito utilizado para serviços da Móveis Espectro. Cada unidade de Aura equivale a <strong>R$ 1,00</strong>.</p>
   </div>
 <script>
 function setAura(valor) {
@@ -267,7 +267,7 @@ function setAura(valor) {
 
   input.value = valor;
   spanAura.textContent = valor;
-  spanReais.textContent = (valor * 1.30).toFixed(2).replace('.', ',');
+  spanReais.textContent = (valor * 1).toFixed(2).replace('.', ',');
 }
 </script>
 
