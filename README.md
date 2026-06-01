@@ -31,6 +31,10 @@ Sistema de venda de móveis planejados e sob medida
      ```php
      $access_token = 'SEU_ACCESS_TOKEN'; // substitua pelo seu Access Token
      ```
+      - `webhook.php`
+ ```javascript
+     $access_token = getenv('MP_ACCESS_TOKEN') ?: 'ACESS TOKEN';
+ ```
 
 5. **Testar**
    - Gere um Pix ou pagamento no cartão para validar a integração.
