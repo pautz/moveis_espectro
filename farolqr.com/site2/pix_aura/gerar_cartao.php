@@ -3,7 +3,7 @@ $caixa_postal = $_GET['caixa_postal'] ?? '';
 $aura = intval($_GET['aura'] ?? 0);
 
 // preço fixo por aura
-$preco_por_aura = 1.30;
+$preco_por_aura = 1;
 $valor_reais = round($aura * $preco_por_aura, 2);
 ?>
 <!DOCTYPE html>
@@ -12,8 +12,10 @@ $valor_reais = round($aura * $preco_por_aura, 2);
   <meta charset="UTF-8">
   <title>Pagamento com Cartão</title>
   <script src="https://sdk.mercadopago.com/js/v2"></script>
-  <style>
-  /* Reset básico */
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <style>/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -113,10 +115,7 @@ button:hover {
   from {opacity: 0; transform: translateY(-10px);}
   to {opacity: 1; transform: translateY(0);}
 }
-
-  </style>
-</head>
-<body>
+</style>
   <form id="paymentForm" method="POST" action="processar_cartao.php">
     <h2>Pagamento com Cartão</h2>
     <label>Caixa Postal</label>
@@ -163,33 +162,44 @@ button:hover {
     const installmentsSelect = document.getElementById('installments');
     const valor = <?php echo $valor_reais; ?>;
 
-    // Regra própria de parcelamento baseada no valor
-    function gerarParcelas(valor) {
-      installmentsSelect.innerHTML = "";
-      let maxParcelas = 1;
+    // Detecta bandeira e gera opções de parcelas
+    cardNumberElement.addEventListener('keyup', async function() {
+      if (cardNumberElement.value.length >= 6) {
+        const bin = cardNumberElement.value.substring(0,6);
+        try {
+          const methods = await mp.getPaymentMethods({ bin });
+          if (methods.results && methods.results.length > 0) {
+            const paymentMethodId = methods.results[0].id;
+            document.getElementById('payment_method_id').value = paymentMethodId;
 
-      if (valor >= 100 && valor < 300) {
-        maxParcelas = 3;
-      } else if (valor >= 300 && valor < 600) {
-        maxParcelas = 6;
-      } else if (valor >= 600) {
-        maxParcelas = 12;
+            // regra própria de parcelamento
+            installmentsSelect.innerHTML = "";
+            let maxParcelas = 1;
+            if (valor >= 100 && valor < 300) maxParcelas = 3;
+            else if (valor >= 300 && valor < 600) maxParcelas = 6;
+            else if (valor >= 600) maxParcelas = 12;
+
+            for (let i = 1; i <= maxParcelas; i++) {
+              const opt = document.createElement("option");
+              opt.value = i;
+              opt.textContent = `${i}x de R$ ${(valor/i).toFixed(2)}`;
+              installmentsSelect.appendChild(opt);
+            }
+          }
+        } catch (error) {
+          console.error("Erro ao detectar bandeira:", error);
+        }
       }
-
-      for (let i = 1; i <= maxParcelas; i++) {
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = `${i}x de R$ ${(valor/i).toFixed(2)}`;
-        installmentsSelect.appendChild(opt);
-      }
-    }
-
-    // Gera parcelas ao carregar a página
-    gerarParcelas(valor);
+    });
 
     // Gera token e envia
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
+      const paymentMethodId = document.getElementById('payment_method_id').value;
+      if (!paymentMethodId) {
+        alert("Digite ao menos 6 dígitos do cartão para detectar a bandeira.");
+        return;
+      }
 
       const cardData = {
         cardNumber: cardNumberElement.value,
