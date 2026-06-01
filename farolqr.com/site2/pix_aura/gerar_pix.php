@@ -22,7 +22,7 @@ if (!$result->fetch_assoc()) {
 }
 
 // Cálculo do valor (sempre no backend)
-$preco_por_aura = 1.30;
+$preco_por_aura = 1;
 $reais = round($aura * $preco_por_aura, 2);
 
 // Gera identificador único
