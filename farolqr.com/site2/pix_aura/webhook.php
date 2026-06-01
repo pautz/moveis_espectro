@@ -20,7 +20,7 @@ if (!$id_pagamento) {
 }
 
 // Consulta à API do Mercado Pago
-$access_token = getenv('MP_ACCESS_TOKEN') ?: 'APP_USR-4181749501270506-040914-3a36aa961fcb7111ee4cf0bd0fa3524f-157818820';
+$access_token = getenv('MP_ACCESS_TOKEN') ?: 'ACESS TOKEN';
 $url = "https://api.mercadopago.com/v1/payments/$id_pagamento";
 
 $ch = curl_init($url);
